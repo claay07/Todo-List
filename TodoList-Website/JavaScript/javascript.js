@@ -16,17 +16,27 @@ input.addEventListener('keyup', () => {
 
 addBtn.addEventListener('click', () => {
     if (input.value.trim() != 0){
-        let newItem = document.createElement('div');
-        newItem.classList.add('item');
-        newItem.innerHTML = `
-        <p> ${input.value} </p>
-        <div class="item-btn">
-            <i class="fa-solid fa-pen-to-square"></i>
-            <i class="fa-solid fa-trash"></i>
-        </div>`
+        Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Task successfully added to your list',
+            showConfirmButton: false,
+            timer: 1000
+          })
+          setTimeout(function() { 
+            let newItem = document.createElement('div');
+            newItem.classList.add('item');
+            newItem.innerHTML = `
+            <p> ${input.value} </p>
+            <div class="item-btn">
+                <i class="fa-solid fa-pen-to-square"></i>
+                <i class="fa-solid fa-trash"></i>
+            </div>`
 
-        tasks.appendChild(newItem);
-        input.value = '';
+            tasks.appendChild(newItem);
+            input.value = '';
+          }, 1000);
+        
     } else {
         Swal.fire(
             '',
@@ -38,9 +48,28 @@ addBtn.addEventListener('click', () => {
 
 /* this script will remove the selected list */
 
-tasks.addEventListener('click', (e) => {
+  tasks.addEventListener('click', (e) => {
     if (e.target.classList.contains('fa-trash')) {
-        e.target.parentElement.parentElement.remove();
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              Swal.fire(
+                'Deleted!',
+                'Your file has been deleted.',
+                'success'
+              )
+              setTimeout(function(){
+                e.target.parentElement.parentElement.remove();
+              }, 1000)
+            }
+          })
     } else {
         
     }
